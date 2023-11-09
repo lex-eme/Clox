@@ -51,6 +51,9 @@
     <ClCompile Include="compiler.c">
       <Filter>Fichiers sources\frontend</Filter>
     </ClCompile>
+    <ClCompile Include="object.c">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h">
@@ -76,6 +79,9 @@
     </ClInclude>
     <ClInclude Include="compiler.h">
       <Filter>Fichiers d%27en-tête\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="object.h">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
