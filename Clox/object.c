@@ -18,15 +18,20 @@ static Obj* allocateObject(size_t size, ObjType type) {
 	return object;
 }
 
-static ObjString* allocateString(char* chars, int length) {
-	ObjString* string = ALLOCATE_OBJ(ObjString, OBJ_STRING);
+static ObjString* allocateString(char* chars, int length) {ObjString* string = ALLOCATE(ObjString, sizeof(ObjString) + (length + 1) * sizeof(char) + 1);
+	string->obj.type = OBJ_STRING;
+	string->obj.next = vm.objects;
 	string->length = length;
-	string->chars = chars;
+	memcpy(string->chars, chars, length + 1);
+	
+	vm.objects = (Obj*)string;
 	return string;
 }
 
 ObjString* takeString(char* chars, int length) {
-	return allocateString(chars, length);
+	ObjString* result = allocateString(chars, length);
+	FREE_ARRAY(char, chars, length + 1);
+	return result;
 }
 
 ObjString* copyString(const char* chars, int length) {
@@ -37,7 +42,8 @@ ObjString* copyString(const char* chars, int length) {
 }
 
 void printObject(Value value) {
-	switch (OBJ_TYPE(value)) {
+	ObjType type = OBJ_TYPE(value);
+	switch (type) {
 		case OBJ_STRING:
 			printf("%s", AS_CSTRING(value));
 			break;
