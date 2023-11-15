@@ -39,9 +39,6 @@
     <ClCompile Include="debug.c">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="value.c">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="vm.c">
       <Filter>Fichiers sources\backend</Filter>
     </ClCompile>
@@ -51,7 +48,13 @@
     <ClCompile Include="compiler.c">
       <Filter>Fichiers sources\frontend</Filter>
     </ClCompile>
+    <ClCompile Include="value.c">
+      <Filter>Fichiers sources\backend</Filter>
+    </ClCompile>
     <ClCompile Include="object.c">
+      <Filter>Fichiers sources\backend</Filter>
+    </ClCompile>
+    <ClCompile Include="table.c">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -68,9 +71,6 @@
     <ClInclude Include="debug.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="value.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="vm.h">
       <Filter>Fichiers d%27en-tête\backend</Filter>
     </ClInclude>
@@ -80,7 +80,13 @@
     <ClInclude Include="compiler.h">
       <Filter>Fichiers d%27en-tête\frontend</Filter>
     </ClInclude>
+    <ClInclude Include="value.h">
+      <Filter>Fichiers d%27en-tête\backend</Filter>
+    </ClInclude>
     <ClInclude Include="object.h">
+      <Filter>Fichiers d%27en-tête\backend</Filter>
+    </ClInclude>
+    <ClInclude Include="table.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
