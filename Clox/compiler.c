@@ -42,12 +42,14 @@ typedef struct {
 typedef struct {
 	Token name;
 	int depth;
+	bool isConstant;
 } Local;
 
 typedef struct {
 	Local locals[UINT8_COUNT];
 	int localCount;
 	int scopeDepth;
+	Table globals;
 } Compiler;
 
 Parser parser;
@@ -143,6 +145,7 @@ static void emitConstant(Value value) {
 static void initCompiler(Compiler* compiler) {
 	compiler->localCount = 0;
 	compiler->scopeDepth = 0;
+	initTable(&compiler->globals);
 	current = compiler;
 }
 
@@ -153,6 +156,7 @@ static void endCompiler() {
 	}
 #endif
 	emitReturn();
+	freeTable(&current->globals);
 }
 
 static void beginScope() {
@@ -239,7 +243,7 @@ static int resolveLocal(Compiler* compiler, Token* name) {
 	return -1;
 }
 
-static void addLocal(Token name) {
+static void addLocal(Token name, bool isConstant) {
 	if (current->localCount == UINT8_COUNT) {
 		error("Too many local variables in function.");
 		return;
@@ -248,12 +252,16 @@ static void addLocal(Token name) {
 	Local* local = &current->locals[current->localCount++];
 	local->name = name;
 	local->depth = -1;
+	local->isConstant = isConstant;
 }
 
-static void declareVariable() {
-	if (current->scopeDepth == 0) return;
-
+static void declareVariable(bool isConstant) {
 	Token* name = &parser.previous;
+	if (current->scopeDepth == 0) {
+		tableSet(&current->globals, copyString(name->start, name->length), BOOL_VAL(isConstant));
+		return;
+	}
+	
 	for (int i = current->localCount - 1; i >= 0; i--) {
 		Local* local = &current->locals[i];
 		if (local->depth != -1 && local->depth < current->scopeDepth) {
@@ -264,12 +272,13 @@ static void declareVariable() {
 			error("Already a variable with this name in this scope.");
 		}
 	}
-	addLocal(*name);
+	addLocal(*name, isConstant);
 }
 
 static void namedVariable(Token name, bool canAssign) {
 	uint8_t getOp, setOp;
 	int arg = resolveLocal(current, &name);
+	bool isGlobal = arg == -1;
 	if (arg != -1) {
 		getOp = OP_GET_LOCAL;
 		setOp = OP_SET_LOCAL;
@@ -280,6 +289,15 @@ static void namedVariable(Token name, bool canAssign) {
 	}
 
 	if (canAssign && match(TOKEN_EQUAL)) {
+		bool isConstant = false;
+		if (isGlobal) {
+			Value value;
+			isConstant = tableGet(&current->globals, AS_STRING(currentChunk()->constants.values[arg]), &value) && AS_BOOL(value);
+		} else {
+			isConstant = current->locals[arg].isConstant;
+		}
+		if (isConstant) error("Cannot assign value to constant.");
+		
 		expression();
 		emitBytes(setOp, (uint8_t)arg);
 	} else {
@@ -370,10 +388,10 @@ static void parsePrecedence(Precedence precedence) {
 	}
 }
 
-static uint8_t parseVariable(const char* errorMessage) {
+static uint8_t parseVariable(const char* errorMessage, bool isConstant) {
 	consume(TOKEN_IDENTIFIER, errorMessage);
 
-	declareVariable();
+	declareVariable(isConstant);
 	if (current->scopeDepth > 0) return 0;
 
 	return identifierConstant(&parser.previous);
@@ -408,8 +426,8 @@ static void block() {
 	consume(TOKEN_RIGHT_BRACE, "Expect '}' after block.");
 }
 
-static void varDeclaration() {
-	uint8_t global = parseVariable("Expect variable name.");
+static void varDeclaration(bool isConstant) {
+	uint8_t global = parseVariable("Expect variable name.", isConstant);
 
 	if (match(TOKEN_EQUAL)) {
 		expression();
@@ -459,7 +477,10 @@ static void synchronize() {
 
 static void declaration() {
 	if (match(TOKEN_VAR)) {
-		varDeclaration();
+		varDeclaration(false);
+	} else if (match(TOKEN_LET)) {
+		varDeclaration(true);
+
 	} else {
 		statement();
 	}
