@@ -25,18 +25,15 @@
     <Filter Include="Fichiers sources\frontend">
       <UniqueIdentifier>{26c5d9f5-fe72-495c-94b9-32c56edc7a61}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\common">
+      <UniqueIdentifier>{4f006958-995a-48da-ac3e-dc1fc7768ada}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\common">
+      <UniqueIdentifier>{8d05d097-381a-4f71-9e3d-64c77ca20262}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.c">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="chunk.c">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="memory.c">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="debug.c">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="vm.c">
@@ -54,23 +51,20 @@
     <ClCompile Include="object.c">
       <Filter>Fichiers sources\backend</Filter>
     </ClCompile>
+    <ClCompile Include="memory.c">
+      <Filter>Fichiers sources\common</Filter>
+    </ClCompile>
+    <ClCompile Include="debug.c">
+      <Filter>Fichiers sources\common</Filter>
+    </ClCompile>
+    <ClCompile Include="chunk.c">
+      <Filter>Fichiers sources\common</Filter>
+    </ClCompile>
     <ClCompile Include="table.c">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="common.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="chunk.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="memory.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="debug.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="vm.h">
       <Filter>Fichiers d%27en-tête\backend</Filter>
     </ClInclude>
@@ -86,8 +80,20 @@
     <ClInclude Include="object.h">
       <Filter>Fichiers d%27en-tête\backend</Filter>
     </ClInclude>
+    <ClInclude Include="chunk.h">
+      <Filter>Fichiers d%27en-tête\common</Filter>
+    </ClInclude>
+    <ClInclude Include="common.h">
+      <Filter>Fichiers d%27en-tête\common</Filter>
+    </ClInclude>
+    <ClInclude Include="debug.h">
+      <Filter>Fichiers d%27en-tête\common</Filter>
+    </ClInclude>
+    <ClInclude Include="memory.h">
+      <Filter>Fichiers d%27en-tête\common</Filter>
+    </ClInclude>
     <ClInclude Include="table.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Fichiers d%27en-tête\common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
