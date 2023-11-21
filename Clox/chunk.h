@@ -9,6 +9,7 @@ typedef enum {
 	OP_NIL,
 	OP_TRUE,
 	OP_FALSE,
+	OP_COPY,
 	OP_POP,
 	OP_GET_LOCAL,
 	OP_SET_LOCAL,
